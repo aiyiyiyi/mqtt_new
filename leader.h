@@ -6,9 +6,25 @@
 #define SERVER_IP "117.78.5.125"
 #define SERVER_PORT 1883
 
-#define ClientID "67604637ef99673c8ad65ca8_stm32_0_1_2025011312"
+#define ClientID "67604637ef99673c8ad65ca8_stm32_0_1_2025011814"
 #define Username "67604637ef99673c8ad65ca8_stm32"
-#define Password "7f5fc34c6dadf7c3c4b67ee45177f1ab86633f5e02c869b13d"
+#define Password "f09152f9dd398d13a7edb26ae57a6d31cf474b81e4d7d3cb26aa8e92fc020f71"
+//设备消息上报
+#define MESSAGE_REPORTING_TOPIC "$oc/devices/67604637ef99673c8ad65ca8_stm32/sys/messages/up"
+
+//消息
+// #define MESSAGE 
+
+// {
+//     "services": [
+//         {
+//             "service_id": "stm32",
+//             "properties": {
+//                 "TEMP": 27
+//             }
+//         }
+//     ]
+// }
 
 /* 摘自文档第14页 */
 typedef enum {
