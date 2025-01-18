@@ -188,9 +188,11 @@ int mqtt_subscribe() {
         if (overLenght > 0) {
             encodeByte |= 128;
         }
+        mqtt_Sdata[SdataLen++] = encodeByte;
     } while (overLenght > 0);
 
-    // matt_Sdata[SdataLen++] = ;  //
+    mqtt_Sdata[SdataLen++] = 0x00;
+    mqtt_Sdata[SdataLen++] = 0x01;
 
     // 主题过滤器
     mqtt_Sdata[SdataLen++] = (TopicLen >> 8) & 0xFF;
@@ -198,19 +200,21 @@ int mqtt_subscribe() {
     memcpy(&mqtt_Sdata[SdataLen], MESSAGE_REPORTING_TOPIC, TopicLen);
     SdataLen += TopicLen;
     // 服务质量要求（qos）
-    mqtt_Sdata[SdataLen++] = 0x01;
+    mqtt_Sdata[SdataLen++] = 0x00;
 
     memcpy(mqttSendData.mqtt_Sdata, mqtt_Sdata, SdataLen);
     mqttSendData.SdataLen = SdataLen;
 
     if (mqtt_send(mqttSendData.mqtt_Sdata, mqttSendData.SdataLen) < 0) {
         printf("MQTT订阅报文发送失败\n");
+        return -1;
     } else {
         printf("MQTT订阅报文发送成功\n");
     }
     int recv_len = mqtt_recv(mqttRecvData.mqtt_Rdata, MQTT_MAX_BUF);
     if (recv_len <= 0) {
         printf("MQTT订阅接收返回消息失败\n");
+        return -1;
     } else {
         printf("MQTT订阅接收返回消息成功\n");
     }
@@ -272,19 +276,19 @@ int main() {
         exit(1);
     }
     if (mqtt_subscribe() < 0) {
-        printf("MQTT订阅失败");
+        printf("MQTT订阅失败\n");
         exit(1);
     } else {
-        printf("MQTT订阅成功");
+        printf("MQTT订阅成功\n");
     }
     sprintf(message,
         "{\"services\": [{\"service_id\": "
         "\"stm32\",\"properties\":{\"TEMP\":%.1f}}]}",
         (double)(TEMP += 0.2));
     if (mqtt_publish(message) < 0) {
-        printf("MQTT消息发布失败");
+        printf("MQTT消息发布失败\n");
     } else {
-        printf("MQTT消息发布成功");
+        printf("MQTT消息发布成功\n");
     }
 
     close(sockfd);
